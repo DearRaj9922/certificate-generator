@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+.certificate-body{
+    overflow: hidden;
+    width:99vw;
+}
+.certificate-body::-webkit-scrollbar{
+    display: none;
+}
+
+.certificate-img{
+    position: absolute;
+    width:100vw;
+}
+.name-div{
+    position: relative;
+    z-index: 1;
+    font-family:"Great Vibes", cursive; ;
+    font-size:70px;
+    color: black;
+    margin-top:650px;
+    margin-left:820px;
+}
+.event-div{
+    position: absolute;
+    z-index: 1;
+    font-size:40px;
+    color: black;
+    margin-top:750px;
+    margin: left 900px;
+}

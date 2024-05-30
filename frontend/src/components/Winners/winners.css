@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+.winner-body{
+    overflow: hidden;
+    width:99vw;
+}
+.winner-body::-webkit-scrollbar{
+    display: none;
+}
+
+.winner-img{
+    position: absolute;
+    width:100vw;
+}
+.winner-name-div{
+    position: relative;
+    z-index: 1;
+    font-family:"Great Vibes", cursive; ;
+    font-size:70px;
+    color: black;
+    margin-top:650px;
+    margin-left:820px;
+}
+.event-name-div{
+    position: relative;
+    z-index: 1;
+    font-size:40px;
+    color: black;
+    margin-top:10px;
+    margin-left:1200px;
+}
+.position-div{
+    position: relative;
+    z-index: 1;
+    font-size:40px;
+    color: black;
+    margin-top:10px;
+    margin-left:800px;
+}
