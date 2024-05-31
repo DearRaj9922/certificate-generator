@@ -1,31 +1,60 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import './home.css';
 import axios from 'axios';
 import {saveAs} from 'file-saver';
+import userData from "./userData.json";
 // import imgcertificate from "../../assets/participation.png"
 
 function App() {
   // const imgcertificate="https://drive.google.com/file/d/14t4uIqenoBvjgZkWt9etesW6rIBmrQ8d/view?usp=drive_link";
 
+  const [currentUser, setCurrentUser] = useState(0);
   const[name,setName]=useState('')
   const[email,setEmail]=useState('')
   const[event,setEvent]=useState('')
   const [position, setPosition] = useState('');
   const [certificateType, setCertificateType] = useState('');
   const data={name,event,email,certificateType,position};
+
+  
   // const[name,setName]=useState('')
+
+  // Load user data when the component mounts or currentUser changes
+  useEffect(() => {
+    if (userData.length > 0) {
+      const user = userData[currentUser];
+      setName(user.name || '');
+      setEmail(user.email || '');
+      setEvent(user.event || '');
+      setCertificateType(user.certificateType || '');
+      setPosition(user.position || '');
+    }
+  }, [currentUser]);
+
+  const handleUserChange = (e) => {
+    setCurrentUser(e.target.value);
+  };
 
   const SubmitForm=async(e)=>{
     e.preventDefault()
+    for (let i = 0; i < userData.length; i++) {
+      const user = userData[i];
+      const userDataToSend = {
+        name: user.name,
+        email: user.email,
+        event: user.event,
+        certificateType: user.certificateType,
+        position: user.position,
+      };
 
-    await axios.post("http://localhost:8000/createPdf",data)  //create pdf next=>get pdf
+    await axios.post("http://localhost:8000/createPdf",userDataToSend)  //create pdf next=>get pdf
     .then(()=>
         axios.get("http://localhost:8000/fetchPdf",{responseType:'blob'})
     .then((res)=>{
       const pdfBlob=new Blob([res.data],{type:'application/pdf'}) //to fetch the generatde pdf
 
       //to save we use file saver
-      saveAs(pdfBlob,'InvoiceDocument.pdf')
+      saveAs(pdfBlob,'Certificate.pdf')
 
 
       //to clear all input after downloading
@@ -34,7 +63,7 @@ function App() {
       // setEmail('')
     })
     .then(()=>
-      axios.post(`http://localhost:8000/sendPdf`,{email:email})
+      axios.post(`http://localhost:8000/sendPdf`,{email:user.email})
     .then(response=>{
       console.log(response);
       alert(response.data)
@@ -42,6 +71,7 @@ function App() {
     )
 
     )
+  }
   }
 
   // const SubmitForm = async (e) => {
@@ -100,13 +130,19 @@ function App() {
       <h1>Generate And Download Pdf</h1>
       <form onSubmit={SubmitForm}>
         <div className="info">
-          <input type="text" placeholder="name" name="name" value={name} onChange={(e)=>setName(e.target.value)}/>
+        <label htmlFor="user-select">Select User:</label>
+          <select id="user-select" value={currentUser} onChange={handleUserChange}>
+            {userData.map((user, index) => (
+              <option key={index} value={index}>{user.name}</option>
+            ))}
+          </select>
+          <input type="text" placeholder="name" name="name" value={name} readOnly/>
           <br/>
-          <input type="email" placeholder="Email" name="email" value={email} onChange={(e)=>setEmail(e.target.value)}/>
+          <input type="email" placeholder="Email" name="email" value={email} readOnly/>
           <br/>
-          <input type="text" placeholder="Event" name="event" value={event} onChange={(e)=>setEvent(e.target.value)}/>   
+          <input type="text" placeholder="Event" name="event" value={event} readOnly/>   
           <br/>
-          <select name="certificateType" value={certificateType} onChange={(e) => setCertificateType(e.target.value)}>
+          <select name="certificateType" value={certificateType} readOnly>
             <option value="">Select Certificate Type</option>
             <option value="Participation Certificate">Participation Certificate</option>
             <option value="Winner Certificate">Winner Certificate</option>
@@ -114,7 +150,7 @@ function App() {
           <br/>
           {certificateType === 'Winner Certificate' && (
             <>
-              <select name="position" value={position} onChange={(e) => setPosition(e.target.value)}>
+              <select name="position" value={position} readOnly>
                 <option value="">Select Position</option>
                 <option value="1st">1st</option>
                 <option value="2nd">2nd</option>

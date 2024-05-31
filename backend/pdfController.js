@@ -16,7 +16,7 @@ exports.createPdf=(req,res)=>{
                       type: 'pdf',
                       quality: '100' };
 
-    pdf.create(pdfTemplate(req.body),options).toFile('invoice.pdf',(err)=>{
+    pdf.create(pdfTemplate(req.body),options).toFile('certificate.pdf',(err)=>{
         if(err){
             console.log(err);
         }
@@ -26,12 +26,12 @@ exports.createPdf=(req,res)=>{
 }
 
 exports.fetchPdf=(req,res)=>{
-    res.sendFile(path.join(__dirname, 'invoice.pdf'))
+    res.sendFile(path.join(__dirname, 'certificate.pdf'))
 }
 exports.sendPdf=(req,res)=>{
 
 
-    pathToAttachment=path.join(__dirname, 'invoice.pdf')
+    pathToAttachment=path.join(__dirname, 'certificate.pdf')
     attachment=fs.readFileSync(pathToAttachment).toString("base64")
 
     let smtpTransport=nodemailer.createTransport({
@@ -55,7 +55,7 @@ exports.sendPdf=(req,res)=>{
         attachments:[
             {
                 content:attachment,
-                filename:'invoice.pdf',
+                filename:'certificate.pdf',
                 type:'application/pdf',
                 path:pathToAttachment
             }
