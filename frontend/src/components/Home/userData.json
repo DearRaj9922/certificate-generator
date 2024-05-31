@@ -1,0 +1,15 @@
+[
+    {
+      "name": "John Doe",
+      "email": "draj56227@gmail.com",
+      "event": "Science Fair",
+      "certificateType": "Winner Certificate",
+      "position": "1st"
+    },
+    {
+      "name": "Jane Smith",
+      "email": "grignardreagent238@gmail.com",
+      "event": "Math Olympiad",
+      "certificateType": "Participation Certificate"
+    }
+  ]
